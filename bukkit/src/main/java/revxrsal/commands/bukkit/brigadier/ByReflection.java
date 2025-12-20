@@ -140,6 +140,16 @@ final class ByReflection<A extends BukkitCommandActor> implements BukkitBrigadie
         LiteralCommandNode<Object> node = parser.createNode(command);
 
         PluginCommand bCommand = getCommand(plugin, command.firstNode().name());
+        
+        // Handle null case: use command name as the only alias (fallback for dynamic commands)
+        if (bCommand == null) {
+            if (!node.getLiteral().equals(command.firstNode().name())) {
+                node = renameLiteralNode(node, command.firstNode().name());
+            }
+            register(node);
+            return;
+        }
+        
         Collection<String> aliases = BukkitBrigadierBridge.getAliases(bCommand);
         if (!aliases.contains(node.getLiteral())) {
             node = renameLiteralNode(node, command.firstNode().name());

@@ -98,9 +98,18 @@ final class ByPaperEvents<A extends BukkitCommandActor> implements BukkitBrigadi
             unknownCommandListenerRegistered = true;
         }
         LiteralCommandNode<Object> node = parser.createNode(command);
-        Collection<String> aliases = BukkitBrigadierBridge.getAliases(
-                getCommand(plugin, command.firstNode().name())
-        );
+        PluginCommand pluginCmd = getCommand(plugin, command.firstNode().name());
+        
+        // Handle null case: use command name as the only alias (fallback for dynamic commands)
+        if (pluginCmd == null) {
+            if (!node.getLiteral().equals(command.firstNode().name())) {
+                node = renameLiteralNode(node, command.firstNode().name());
+            }
+            addChild(rootNode, node);
+            return;
+        }
+        
+        Collection<String> aliases = BukkitBrigadierBridge.getAliases(pluginCmd);
         if (!aliases.contains(node.getLiteral())) {
             node = renameLiteralNode(node, command.firstNode().name());
         }
