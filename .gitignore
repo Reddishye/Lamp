@@ -29,3 +29,7 @@ hs_err_pid*
 /copier.bat
 run
 /examples/fabric-mod/run/
+
+# Build directories
+**/build/
+**/out/
