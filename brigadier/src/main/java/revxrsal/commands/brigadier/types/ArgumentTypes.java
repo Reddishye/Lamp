@@ -117,7 +117,7 @@ public final class ArgumentTypes<A extends CommandActor> {
     }
 
     /**
-     * Creates a {@link SuggestionProviders.Builder} that contains the providers registered
+     * Creates a {@link Builder} that contains the providers registered
      * in this registry.
      *
      * @return The new builder

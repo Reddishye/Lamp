@@ -19,7 +19,8 @@ include("velocity")
 include("cli")
 include("sponge")
 include("jda")
-include("fabric")
+// Temporarily disabled due to fabric-loom version issues
+// include("fabric")
 include("minestom")
 include("internal-paper-stubs")
 
