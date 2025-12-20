@@ -19,7 +19,7 @@ include("velocity")
 include("cli")
 include("sponge")
 include("jda")
-// Temporarily disabled due to fabric-loom version issues
+// Temporarily disabled: fabric-loom plugin version issue (1.8-SNAPSHOT doesn't exist)
 // include("fabric")
 include("minestom")
 include("internal-paper-stubs")
