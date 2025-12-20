@@ -78,7 +78,10 @@ subprojects {
 
             publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
 
-            signAllPublications()
+            // Only sign if credentials are available (skip for JitPack builds)
+            if (System.getenv("ORG_GRADLE_PROJECT_signingInMemoryKey") != null) {
+                signAllPublications()
+            }
         }
 
 
