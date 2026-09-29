@@ -16,7 +16,7 @@ plugins {
 }
 
 group = "io.github.revxrsal"
-version = "4.0.0-rc.18"
+version = publishedVersion()
 
 java {
     toolchain {
@@ -94,5 +94,29 @@ subprojects {
         annotationProcessor("org.projectlombok:lombok:1.18.30")
 
         compileOnly("org.jetbrains:annotations:24.0.1")
+    }
+}
+
+fun publishedVersion(): String {
+    if (System.getenv("JITPACK") == "true") {
+        return System.getenv("VERSION")?.takeIf { it.isNotBlank() }
+            ?: error("JitPack build without VERSION")
+    }
+    git("describe", "--tags", "--exact-match")?.let { return it }
+    val sha = git("rev-parse", "--short=10", "HEAD")
+        ?: error("Cannot determine version: no tag and git is unavailable")
+    return "0.0.0-$sha-SNAPSHOT"
+}
+
+fun git(vararg args: String): String? {
+    return try {
+        val process = ProcessBuilder("git", *args)
+            .directory(rootDir)
+            .redirectError(ProcessBuilder.Redirect.DISCARD)
+            .start()
+        val text = process.inputStream.bufferedReader().readText().trim()
+        if (process.waitFor() == 0 && text.isNotEmpty()) text else null
+    } catch (_: Exception) {
+        null
     }
 }
